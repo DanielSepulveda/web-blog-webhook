@@ -2,14 +2,24 @@ service: aws-webhook
 
 frameworkVersion: ">=1.1.0 <2.0.0"
 
+package:
+  individually: true
+
+plugins:
+  - serverless-bundle
+  - serverless-dotenv-plugin
+
 provider:
   name: aws
   runtime: nodejs12.x
+  environment:
+    ALGOLIA_API_KEY: ${env:ALGOLIA_API_KEY}
 
 functions:
-  currentTime:
-    handler: handler.endpoint
+  webhook:
+    handler: handler.indexPost
+    description: DatoCMS webhook for Algolia App Search
     events:
       - http:
-          path: ping
-          method: get
+          path: indexPost
+          method: post
